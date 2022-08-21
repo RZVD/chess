@@ -14,4 +14,6 @@ module Symbols
   BLACK_BISHOP = "\u265d"
   BLACK_KNIGHT = "\u265e"
   BLACK_PAWN = "\u265f"
+
+  MOVE_DOT = "\33[31m \u2022 \33[m"
 end
