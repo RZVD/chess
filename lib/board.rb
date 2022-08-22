@@ -16,10 +16,10 @@ class Board
     8.times do |i|
       @grid[1][i] = Pawn.new([1, i], 'black')
       @grid[6][i] = Pawn.new([6, i], 'white')
-      @grid[2][i] = Piece.new
-      @grid[3][i] = Piece.new
-      @grid[4][i] = Piece.new
-      @grid[5][i] = Piece.new
+      @grid[2][i] = Piece.new([2, i])
+      @grid[3][i] = Piece.new([3, i])
+      @grid[4][i] = Piece.new([4, i])
+      @grid[5][i] = Piece.new([5, i])
     end
 
     # rooks
@@ -105,7 +105,7 @@ class Board
           @grid[initial_row][initial_col], @grid[target_row][target_col]
       elsif @grid[target_row][target_col].color != @grid[initial_row][initial_col].color
         @grid[target_row][target_col] = @grid[initial_row][initial_col]
-        @grid[initial_row][initial_col] = Piece.new # ([initial_row, target_row])
+        @grid[initial_row][initial_col] = Piece.new([initial_row, target_row])
       end
     end
 

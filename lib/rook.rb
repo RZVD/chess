@@ -5,7 +5,7 @@ class Rook < Piece
   attr_accessor :location
 
   def initialize(location, color)
-    @location = location
+    super
     @color = color
     @symbol = if color == 'black'
                 "\33[30m#{BLACK_ROOK} \33[m"
