@@ -1,7 +1,8 @@
 require_relative 'piece'
 # Inherits piece.
 class Queen < Piece
-  attr_reader :symbol
+  attr_reader :symbol, :color
+  attr_accessor :location
 
   def initialize(location, color)
     @location = location
