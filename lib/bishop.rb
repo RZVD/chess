@@ -35,7 +35,6 @@ class Bishop < Piece
         col_check += col_offset
       end
     end
-
     ans
   end
 end

@@ -100,9 +100,16 @@ class Board
               !target_row.between?(0, 7) && !target_row.between?(0, 7)
 
     if @grid[target_row][target_col].possible_move == true
-      @grid[target_row][target_col], @grid[initial_row][initial_col] =
-        @grid[initial_row][initial_col], @grid[target_row][target_col]
+      if @grid[target_row][target_col].instance_of?(Piece)
+        @grid[target_row][target_col], @grid[initial_row][initial_col] =
+          @grid[initial_row][initial_col], @grid[target_row][target_col]
+      elsif @grid[target_row][target_col].color != @grid[initial_row][initial_col].color
+        @grid[target_row][target_col] = @grid[initial_row][initial_col]
+        @grid[initial_row][initial_col] = Piece.new # ([initial_row, target_row])
+      end
     end
+
+    @grid[target_row][target_col].location = [target_row, target_col]
 
     8.times do |i|
       8.times do |j|
@@ -113,12 +120,12 @@ class Board
 end
 
 board = Board.new
-board.query_moves([6, 3])
-board.draw
-board.move([6, 3], [4, 3])
-board.draw
+board.query_moves([7, 1])
+board.move([7, 1], [5, 2])
 
-board.query_moves([7, 2])
+board.query_moves([1, 3])
+board.move([1, 3], [3, 3])
+
+board.query_moves([5, 2])
+board.move([5, 2], [3, 3])
 board.draw
-# board.move([6, 2], [4, 2])
-# board.draw
