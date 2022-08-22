@@ -65,7 +65,9 @@ class Board
                    " #{@grid[i][j].symbol}"
                  end
 
-        if (i + j).even?
+        if @grid[i][j].possible_move && !@grid[i][j].instance_of?(Piece)
+          print "\33[41m#{square}\33[m"
+        elsif (i + j).even?
           print "\33[47m#{square}\33[m"
         else
           print "\33[44m#{square}\33[m"
@@ -120,6 +122,15 @@ class Board
     @grid[target_row][target_col].location = [target_row, target_col]
 
     @grid[target_row][target_col].first = false if @grid[target_row][target_col].instance_of?(Pawn)
+
+    # en passant
+    behind = if @grid[target_row][target_col].color == 'black'
+               target_row - 1
+             else
+               target_row + 1
+             end
+
+    @grid[behind][target_col] = Piece.new([behind, target_col]) unless @grid[behind][target_col].instance_of?(Piece)
 
     8.times do |i|
       8.times do |j|

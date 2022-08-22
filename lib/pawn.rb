@@ -60,11 +60,15 @@ class Pawn < Piece
     col = @location[1]
 
     if direction == 'right'
-      right = col + 1 if (col + 1).between?(0, 7)
+      right = col + 1
+      return unless right.between?(0, 7)
+
       can_capture?(grid[row][right])
 
     else
-      left = col - 1 if (col - 1).between?(0, 7)
+      left = col - 1
+      return unless left.between?(0, 7)
+
       can_capture?(grid[row][left])
     end
   end
