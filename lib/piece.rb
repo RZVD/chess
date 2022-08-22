@@ -6,8 +6,9 @@ class Piece
   include Symbols
   attr_accessor :possible_move
 
-  def initialize(location, _color = nil)
+  def initialize(location, color = nil)
     @location = location
+    @color = color unless color.nil?
     @possible_move = false
   end
 end

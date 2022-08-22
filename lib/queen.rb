@@ -6,7 +6,6 @@ class Queen < Piece
 
   def initialize(location, color)
     super
-    @color = color
     @symbol = if color == 'black'
                 "\33[30m#{BLACK_QUEEN} \33[m"
               else
