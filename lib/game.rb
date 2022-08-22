@@ -2,7 +2,10 @@ require_relative 'board'
 
 # Main game class. Also handles IO
 class Game
+  attr_reader :over, :board
+
   def initialize
+    @over = false
     @board = Board.new
   end
 

@@ -81,9 +81,9 @@ class Board
     col = location[1]
 
     possible = @grid[row][col].possible_moves(@grid)
-    for move in possible do
-      row_pos = move[0]
-      col_pos = move[1]
+    possible.each do |position|
+      row_pos = position[0]
+      col_pos = position[1]
 
       @grid[row_pos][col_pos].possible_move = true if row_pos.between?(0, 7) && col_pos.between?(0, 7)
     end
@@ -100,16 +100,26 @@ class Board
               !target_row.between?(0, 7) && !target_row.between?(0, 7)
 
     if @grid[target_row][target_col].possible_move == true
+
       if @grid[target_row][target_col].instance_of?(Piece)
+        # swap positions
         @grid[target_row][target_col], @grid[initial_row][initial_col] =
           @grid[initial_row][initial_col], @grid[target_row][target_col]
+
+        # update swapped piece's position
+        @grid[initial_row][initial_col].location = [initial_row, initial_col]
+
       elsif @grid[target_row][target_col].color != @grid[initial_row][initial_col].color
+        # remove captured piece
         @grid[target_row][target_col] = @grid[initial_row][initial_col]
         @grid[initial_row][initial_col] = Piece.new([initial_row, target_row])
       end
     end
 
+    # update location
     @grid[target_row][target_col].location = [target_row, target_col]
+
+    @grid[target_row][target_col].first = false if @grid[target_row][target_col].instance_of?(Pawn)
 
     8.times do |i|
       8.times do |j|
@@ -119,13 +129,19 @@ class Board
   end
 end
 
-board = Board.new
-board.query_moves([7, 1])
-board.move([7, 1], [5, 2])
+# board = Board.new
+# board.query_moves([6, 2])
+# board.move([6, 2], [4, 2])
 
-board.query_moves([1, 3])
-board.move([1, 3], [3, 3])
+# board.query_moves([1, 3])
+# board.move([1, 3], [3, 3])
 
-board.query_moves([5, 2])
-board.move([5, 2], [3, 3])
-board.draw
+# board.query_moves([3, 3])
+# board.move([3, 3], [4, 3])
+
+# board.query_moves([4, 2])
+# # board.move([7, 3], [4, 0])
+# # # board.query_moves([4, 0])
+# # board.query_moves([7, 4])
+
+# board.draw
