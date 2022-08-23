@@ -5,13 +5,14 @@ require_relative 'symbols'
 class Piece
   include Symbols
   attr_accessor :possible_move, :location, :first_move
-  attr_reader :color, :en_passant
+  attr_reader :color, :en_passant, :castling
 
   def initialize(location, color = nil)
     @location = location
     @color = color unless color.nil?
     @possible_move = false
     @first_move = false
+    @castiling = false
   end
 
   def possible_moves(_grid)

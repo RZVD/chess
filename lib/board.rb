@@ -65,7 +65,9 @@ class Board
                    " #{@grid[i][j].symbol}"
                  end
 
-        if @grid[i][j].possible_move && !@grid[i][j].instance_of?(Piece)
+        if @grid[i][j].castling
+          print "\33[42m#{square}\33[m"
+        elsif @grid[i][j].possible_move && !@grid[i][j].instance_of?(Piece)
           print "\33[41m#{square}\33[m"
         elsif (i + j).even?
           print "\33[47m#{square}\33[m"
@@ -87,7 +89,12 @@ class Board
       row_pos = position[0]
       col_pos = position[1]
 
-      @grid[row_pos][col_pos].possible_move = true if row_pos.between?(0, 7) && col_pos.between?(0, 7)
+      next unless row_pos.between?(0, 7) && col_pos.between?(0, 7)
+
+      @grid[row_pos][col_pos].possible_move = true
+      if !@grid[row_pos][col_pos].first_move && @grid[row_pos][col_pos].instance_of?(King) && @grid[row_pos][col_pos].color == @grid[row][col]
+        @grid[row_pos][col_pos].castling = true
+      end
     end
   end
 
@@ -99,8 +106,8 @@ class Board
     target_col = target_location[1]
 
     already_captured = false
-    return if !initial_row.between?(0, 7) && !initial_col.between?(0, 7) &&
-              !target_row.between?(0, 7) && !target_row.between?(0, 7)
+    return unless initial_row.between?(0, 7) || initial_col.between?(0, 7) ||
+                  target_row.between?(0, 7) || target_row.between?(0, 7)
 
     return if @grid[target_row][target_col].possible_move == false
 
@@ -145,6 +152,7 @@ class Board
       end
     end
 
+    # clear board after #query_moves
     8.times do |i|
       8.times do |j|
         @grid[i][j].possible_move = false

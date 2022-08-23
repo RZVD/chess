@@ -13,7 +13,7 @@ class Knight < Piece
               end
   end
 
-  def possible_moves(_grid)
+  def possible_moves(grid)
     row = @location[0]
     col = @location[1]
 
@@ -30,7 +30,9 @@ class Knight < Piece
       row_check = row + row_offset
       col_check = col + col_offset
 
-      ans << [row_check, col_check]
+      next unless row_check.between?(0, 7) && col_check.between?(0, 7)
+
+      ans << [row_check, col_check] if grid[row_check][col_check].color != @color
     end
     ans
   end

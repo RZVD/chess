@@ -2,7 +2,7 @@ require_relative 'piece'
 # Inherits piece.
 class Rook < Piece
   attr_reader :symbol, :color
-  attr_accessor :location
+  attr_accessor :location, :first_move
 
   def initialize(location, color)
     super
@@ -28,7 +28,7 @@ class Rook < Piece
       col_check = col + col_offset
 
       while row_check.between?(0, 7) && col_check.between?(0, 7)
-        break if grid[row_check][col_check].class != Piece
+        break if !grid[row_check][col_check].instance_of?(Piece) && !grid[row_check][col_check].instance_of?(King)
 
         ans << [row_check, col_check]
         row_check += row_offset
@@ -42,4 +42,8 @@ class Rook < Piece
   def can_promote?
     super
   end
+
+  # def empty_or_king(item)
+  #   item.instance_of?(Piece) ||
+  # end
 end

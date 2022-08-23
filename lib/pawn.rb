@@ -27,6 +27,7 @@ class Pawn < Piece
 
     ans = []
 
+    blocked = false
     directions.each_with_index do |direction, i|
       row_offset = direction[0]
       col_offset = direction[1]
@@ -34,13 +35,15 @@ class Pawn < Piece
       row_check = row_offset + row
       col_check = col_offset + col
 
+      next unless row_check.between?(0, 7) && col_check.between?(0, 7)
+
       piece_to_capture = grid[row_check][col_check]
 
       case i
       when 0
-        ans << [row_check, col_check] if piece_to_capture.instance_of?(Piece)
+        piece_to_capture.instance_of?(Piece) ? ans << [row_check, col_check] : blocked = true
       when 1
-        ans << [row_check, col_check] if piece_to_capture.instance_of?(Piece) && !first_move
+        ans << [row_check, col_check] if piece_to_capture.instance_of?(Piece) && !first_move && !blocked
       when 2
         ans << [row_check, col_check] if can_capture?(piece_to_capture) || en_passant?(grid, 'right')
       when 3

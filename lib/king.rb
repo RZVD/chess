@@ -2,12 +2,10 @@ require_relative 'piece'
 # Inherits piece.
 class King < Piece
   attr_reader :symbol, :color
-  attr_accessor :location, :first_move
+  attr_accessor :location, :first_move, :castling
 
   def initialize(location, color)
     super
-
-    @first_move = false
     @symbol = if color == 'black'
                 "\33[30m#{BLACK_KING} \33[m"
               else
