@@ -38,4 +38,8 @@ class Rook < Piece
 
     ans
   end
+
+  def can_promote?
+    super
+  end
 end

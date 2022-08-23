@@ -98,8 +98,11 @@ class Board
     target_row = target_location[0]
     target_col = target_location[1]
 
+    already_captured = false
     return if !initial_row.between?(0, 7) && !initial_col.between?(0, 7) &&
               !target_row.between?(0, 7) && !target_row.between?(0, 7)
+
+    return if @grid[target_row][target_col].possible_move == false
 
     if @grid[target_row][target_col].possible_move == true
 
@@ -115,22 +118,32 @@ class Board
         # remove captured piece
         @grid[target_row][target_col] = @grid[initial_row][initial_col]
         @grid[initial_row][initial_col] = Piece.new([initial_row, target_row])
+        already_captured = true
       end
+
     end
 
     # update location
     @grid[target_row][target_col].location = [target_row, target_col]
 
-    @grid[target_row][target_col].first = false if @grid[target_row][target_col].instance_of?(Pawn)
+    @grid[target_row][target_col].first_move = true
+
+    # promote to queen
+    if @grid[target_row][target_col].instance_of?(Pawn) & @grid[target_row][target_col].can_promote?
+      @grid[target_row][target_col] = Queen.new([target_row, target_col], @grid[target_row][target_col].color)
+    end
 
     # en passant
-    behind = if @grid[target_row][target_col].color == 'black'
-               target_row - 1
-             else
-               target_row + 1
-             end
-
-    @grid[behind][target_col] = Piece.new([behind, target_col]) unless @grid[behind][target_col].instance_of?(Piece)
+    if @grid[target_row][target_col].instance_of?(Pawn)
+      behind = if @grid[target_row][target_col].color == 'black'
+                 target_row - 1
+               else
+                 target_row + 1
+               end
+      unless @grid[behind][target_col].instance_of?(Piece) || already_captured
+        @grid[behind][target_col] = Piece.new([behind, target_col])
+      end
+    end
 
     8.times do |i|
       8.times do |j|
@@ -139,20 +152,3 @@ class Board
     end
   end
 end
-
-# board = Board.new
-# board.query_moves([6, 2])
-# board.move([6, 2], [4, 2])
-
-# board.query_moves([1, 3])
-# board.move([1, 3], [3, 3])
-
-# board.query_moves([3, 3])
-# board.move([3, 3], [4, 3])
-
-# board.query_moves([4, 2])
-# # board.move([7, 3], [4, 0])
-# # # board.query_moves([4, 0])
-# # board.query_moves([7, 4])
-
-# board.draw

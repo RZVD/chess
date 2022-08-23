@@ -34,4 +34,8 @@ class Knight < Piece
     end
     ans
   end
+
+  def can_promote?
+    super
+  end
 end

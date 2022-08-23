@@ -2,10 +2,12 @@ require_relative 'piece'
 # Inherits piece.
 class King < Piece
   attr_reader :symbol, :color
-  attr_accessor :location
+  attr_accessor :location, :first_move
 
   def initialize(location, color)
     super
+
+    @first_move = false
     @symbol = if color == 'black'
                 "\33[30m#{BLACK_KING} \33[m"
               else
@@ -36,5 +38,9 @@ class King < Piece
       ans << [row_check, col_check] if grid[row_check][col_check].color != @color
     end
     ans
+  end
+
+  def can_promote?
+    super
   end
 end

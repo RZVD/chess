@@ -2,11 +2,10 @@ require_relative 'piece'
 # Inherits piece.
 class Pawn < Piece
   attr_reader :symbol, :color
-  attr_accessor :location, :first
+  attr_accessor :location, :first_move
 
   def initialize(location, color)
     super
-    @first = true
     @symbol = if color == 'black'
                 "\33[30m#{BLACK_PAWN} \33[m"
               else
@@ -41,7 +40,7 @@ class Pawn < Piece
       when 0
         ans << [row_check, col_check] if piece_to_capture.instance_of?(Piece)
       when 1
-        ans << [row_check, col_check] if piece_to_capture.instance_of?(Piece) && first
+        ans << [row_check, col_check] if piece_to_capture.instance_of?(Piece) && !first_move
       when 2
         ans << [row_check, col_check] if can_capture?(piece_to_capture) || en_passant?(grid, 'right')
       when 3
@@ -71,5 +70,13 @@ class Pawn < Piece
 
       can_capture?(grid[row][left])
     end
+  end
+
+  def can_promote?
+    @location[0] == if @color == 'black'
+                      7
+                    else
+                      0
+                    end
   end
 end
