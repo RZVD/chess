@@ -12,7 +12,7 @@ class Piece
     @color = color unless color.nil?
     @possible_move = false
     @first_move = false
-    @castiling = false
+    @castling = false
   end
 
   def possible_moves(_grid)

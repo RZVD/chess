@@ -91,10 +91,11 @@ class Board
 
       next unless row_pos.between?(0, 7) && col_pos.between?(0, 7)
 
-      @grid[row_pos][col_pos].possible_move = true
-      if !@grid[row_pos][col_pos].first_move && @grid[row_pos][col_pos].instance_of?(King) && @grid[row_pos][col_pos].color == @grid[row][col]
-        @grid[row_pos][col_pos].castling = true
-      end
+      same_color = @grid[row_pos][col_pos].color != @grid[row][col].color
+      @grid[row_pos][col_pos].possible_move = true if same_color
+
+      @grid[row_pos][col_pos].castling = true if !same_color &&
+                                                 !@grid[row][col].first_move && !@grid[row_pos][col_pos].first_move
     end
   end
 
@@ -106,9 +107,9 @@ class Board
     target_col = target_location[1]
 
     already_captured = false
-    return unless initial_row.between?(0, 7) || initial_col.between?(0, 7) ||
-                  target_row.between?(0, 7) || target_row.between?(0, 7)
+    return if [initial_row, initial_col, target_row, target_col].any? { |coordinate| !coordinate.between?(0, 7) }
 
+    castling_swap(initial_row, initial_col) if @grid[target_row][target_col].castling
     return if @grid[target_row][target_col].possible_move == false
 
     if @grid[target_row][target_col].possible_move == true
@@ -124,6 +125,7 @@ class Board
       elsif @grid[target_row][target_col].color != @grid[initial_row][initial_col].color
         # remove captured piece
         @grid[target_row][target_col] = @grid[initial_row][initial_col]
+        # insert new placeholder piece
         @grid[initial_row][initial_col] = Piece.new([initial_row, target_row])
         already_captured = true
       end
@@ -151,12 +153,24 @@ class Board
         @grid[behind][target_col] = Piece.new([behind, target_col])
       end
     end
+    # castling
 
-    # clear board after #query_moves
     8.times do |i|
       8.times do |j|
         @grid[i][j].possible_move = false
+        @grid[i][j].castling = false if @grid[i][j].instance_of?(King)
       end
+    end
+  end
+
+  def castling_swap(initial_row, initial_col)
+    if initial_col.zero?
+      @grid[initial_row][initial_col], @grid[initial_row][3] = @grid[initial_row][3], @grid[initial_row][initial_col]
+      @grid[initial_row][4], @grid[initial_row][2] = @grid[initial_row][2], @grid[initial_row][4]
+    else
+      @grid[initial_row][initial_col], @grid[initial_row][5] = @grid[initial_row][5], @grid[initial_row][initial_col]
+      @grid[initial_row][4], @grid[initial_row][6] = @grid[initial_row][6], @grid[initial_row][4]
+
     end
   end
 end

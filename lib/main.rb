@@ -4,10 +4,10 @@ game = Game.new
 
 until game.over
   game.board.draw
-  querry_move = game.chess_notation_to_coordinates
-  game.board.query_moves(querry_move)
+  first_move = game.chess_notation_to_coordinates
+  game.board.query_moves(first_move)
   game.board.draw
   next_move = game.chess_notation_to_coordinates
-  game.board.move(querry_move, next_move)
+  game.board.move(first_move, next_move)
   game.board.draw
 end
