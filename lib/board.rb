@@ -11,6 +11,8 @@ class Board
   include Symbols
   def initialize
     @grid = Array.new(8) { Array.new(8) }
+    @clear = OS.linux? ? 'clear' : 'cls'
+    @turn = 0
 
     # pawns
     8.times do |i|
@@ -50,7 +52,7 @@ class Board
   end
 
   def draw
-    OS.linux? ? system('clear') : system('cls')
+    system(@clear)
 
     8.times do |i|
       print 8 - i
@@ -77,7 +79,7 @@ class Board
       end
       puts
     end
-    puts '  a  b  c  d  e  f  g  h'
+    puts "  a  b  c  d  e  f  g  h\n#{current_turn}'s turn"
   end
 
   def query_moves(location)
@@ -94,8 +96,8 @@ class Board
       same_color = @grid[row_pos][col_pos].color != @grid[row][col].color
       @grid[row_pos][col_pos].possible_move = true if same_color
 
-      @grid[row_pos][col_pos].castling = true if !same_color &&
-                                                 !@grid[row][col].first_move && !@grid[row_pos][col_pos].first_move
+      @grid[row_pos][col_pos].castling = true if !same_color && !@grid[row][col].first_move &&
+                                                 !@grid[row_pos][col_pos].first_move && @grid[row_pos][col_pos].instance_of?(King) && @grid[row][col].instance_of?(Rook)
     end
   end
 
@@ -110,6 +112,7 @@ class Board
     return if [initial_row, initial_col, target_row, target_col].any? { |coordinate| !coordinate.between?(0, 7) }
 
     castling_swap(initial_row, initial_col) if @grid[target_row][target_col].castling
+
     return if @grid[target_row][target_col].possible_move == false
 
     if @grid[target_row][target_col].possible_move == true
@@ -161,16 +164,37 @@ class Board
         @grid[i][j].castling = false if @grid[i][j].instance_of?(King)
       end
     end
+    @turn += 1
   end
 
   def castling_swap(initial_row, initial_col)
     if initial_col.zero?
       @grid[initial_row][initial_col], @grid[initial_row][3] = @grid[initial_row][3], @grid[initial_row][initial_col]
       @grid[initial_row][4], @grid[initial_row][2] = @grid[initial_row][2], @grid[initial_row][4]
+
+      # update location
+      @grid[initial_row][3].location = [initial_row, 3]
+      @grid[initial_row][2].location = [initial_row, 2]
     else
       @grid[initial_row][initial_col], @grid[initial_row][5] = @grid[initial_row][5], @grid[initial_row][initial_col]
       @grid[initial_row][4], @grid[initial_row][6] = @grid[initial_row][6], @grid[initial_row][4]
 
+      # update location
+      @grid[initial_row][5].location = [initial_row, 5]
+      @grid[initial_row][6].location = [initial_row, 6]
+
     end
+  end
+
+  def current_turn
+    if @turn.even?
+      'White'
+    else
+      'Black'
+    end
+  end
+
+  def piece_at(i, j)
+    @grid[i][j]
   end
 end

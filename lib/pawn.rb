@@ -2,7 +2,7 @@ require_relative 'piece'
 # Inherits piece.
 class Pawn < Piece
   attr_reader :symbol, :color
-  attr_accessor :location, :first_move
+  attr_accessor :location, :first_move, :castling
 
   def initialize(location, color)
     super

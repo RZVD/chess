@@ -2,7 +2,7 @@ require_relative 'piece'
 # Inherits piece.
 class Bishop < Piece
   attr_reader :symbol, :color
-  attr_accessor :location
+  attr_accessor :location, :castling
 
   def initialize(location, color)
     super
@@ -26,11 +26,12 @@ class Bishop < Piece
 
       row_check = row + row_offset
       col_check = col + col_offset
-
+      blocked = false
       while row_check.between?(0, 7) && col_check.between?(0, 7)
-        break if grid[row_check][col_check].class != Piece
+        break if blocked
 
         ans << [row_check, col_check]
+        blocked = true unless grid[row_check][col_check].instance_of?(Piece)
         row_check += row_offset
         col_check += col_offset
       end
