@@ -49,6 +49,9 @@ class Board
     # kings
     @grid[0][4] = King.new([0, 4], 'black')
     @grid[7][4] = King.new([7, 4], 'white')
+
+    @black_king = Ref.new(@grid[0][4])
+    @white_king = Ref.new(@grid[7][4])
   end
 
   def draw
@@ -140,6 +143,8 @@ class Board
     @grid[target_row][target_col].location = [target_row, target_col]
     @grid[target_row][target_col].first_move = true
 
+    # update king pointer location
+
     # promote to queen
     if @grid[target_row][target_col].instance_of?(Pawn) & @grid[target_row][target_col].can_promote?
       @grid[target_row][target_col] = Queen.new([target_row, target_col], @grid[target_row][target_col].color)
@@ -189,8 +194,8 @@ class Board
     end
   end
 
-  def current_turn
-    if @turn.even?
+  def current_turn(turn = @turn)
+    if turn.even?
       'White'
     else
       'Black'
@@ -199,5 +204,36 @@ class Board
 
   def piece_at(i, j)
     @grid[i][j]
+  end
+
+  def check?(_color)
+    possible_opposite = []
+
+    @grid.each_with_index do |row, i|
+      row.each_with_index do |piece, j|
+        if !piece.instance_of?(Piece) && piece.color != current_turn.downcase
+          @grid[i][j].possible_moves(@grid).each { |move| possible_opposite << move }
+        end
+      end
+    end
+
+    possible_king = []
+    king_to_check = if current_turn.downcase == 'black'
+                      @black_king
+                    else
+                      @white_king
+                    end
+
+    king_to_check.possible_moves(@grid).each { |move| possible_king << move }
+    return false if possible_king == []
+
+    possible_king.reject { |move| possible_opposite.any?(move) } == []
+  end
+
+  def check_mate?
+    @grid.each_with_index do |row, _i|
+      row.each_with_index do |piece, j|
+      end
+    end
   end
 end

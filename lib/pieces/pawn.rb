@@ -15,7 +15,6 @@ class Pawn < Piece
   end
 
   def possible_moves(grid)
-    ## TODO : en_passant, capture
     directions = if color == 'black'
                    [[1, 0], [2, 0], [1, 1], [1, -1]]
                  else
