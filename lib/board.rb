@@ -50,8 +50,8 @@ class Board
     @grid[0][4] = King.new([0, 4], 'black')
     @grid[7][4] = King.new([7, 4], 'white')
 
-    @black_king = Ref.new(@grid[0][4])
-    @white_king = Ref.new(@grid[7][4])
+    @black_king = @grid[0][4]
+    @white_king = @grid[7][4]
   end
 
   def draw
@@ -82,7 +82,7 @@ class Board
       end
       puts
     end
-    puts "  a  b  c  d  e  f  g  h\n#{current_turn}'s turn"
+    puts '  a  b  c  d  e  f  g  h' # {current_turn}'s turn"
   end
 
   def query_moves(location)
@@ -206,7 +206,7 @@ class Board
     @grid[i][j]
   end
 
-  def check?(_color)
+  def check?
     possible_opposite = []
 
     @grid.each_with_index do |row, i|
@@ -225,15 +225,24 @@ class Board
                     end
 
     king_to_check.possible_moves(@grid).each { |move| possible_king << move }
-    return false if possible_king == []
+    return [false, []] if possible_king == []
 
-    possible_king.reject { |move| possible_opposite.any?(move) } == []
+    [possible_king.reject { |move| possible_opposite.any?(move) } == [],
+     possible_king.select { |move| possible_opposite.any?(move) }]
   end
 
   def check_mate?
-    @grid.each_with_index do |row, _i|
+    return false unless check?[0]
+
+    overlap = check?[1]
+
+    saving_moves = []
+
+    @grid.each_with_index do |row, i|
       row.each_with_index do |piece, j|
+        @grid[i][j].possible_moves(@grid).each { |move| saving_moves << move } if piece.color == current_turn.downcase
       end
     end
+    overlap.reject { |move| saving_moves.any?(move) } == []
   end
 end
