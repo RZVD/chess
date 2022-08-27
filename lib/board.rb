@@ -1,12 +1,12 @@
 require 'os'
-require_relative 'piece'
-require_relative 'pawn'
-require_relative 'rook'
-require_relative 'bishop'
-require_relative 'knight'
-require_relative 'queen'
-require_relative 'king'
-require_relative 'symbols'
+require_relative 'pieces/piece'
+require_relative 'pieces/pawn'
+require_relative 'pieces/rook'
+require_relative 'pieces/bishop'
+require_relative 'pieces/knight'
+require_relative 'pieces/queen'
+require_relative 'pieces/king'
+require_relative 'pieces/symbols'
 class Board
   include Symbols
   def initialize
@@ -14,7 +14,7 @@ class Board
     @clear = OS.linux? ? 'clear' : 'cls'
     @turn = 0
 
-    # pawns
+    # pawns and empty squares
     8.times do |i|
       @grid[1][i] = Pawn.new([1, i], 'black')
       @grid[6][i] = Pawn.new([6, i], 'white')
@@ -94,6 +94,7 @@ class Board
       next unless row_pos.between?(0, 7) && col_pos.between?(0, 7)
 
       same_color = @grid[row_pos][col_pos].color != @grid[row][col].color
+
       @grid[row_pos][col_pos].possible_move = true if same_color
 
       @grid[row_pos][col_pos].castling = true if !same_color && !@grid[row][col].first_move &&
@@ -115,7 +116,7 @@ class Board
 
     return if @grid[target_row][target_col].possible_move == false
 
-    if @grid[target_row][target_col].possible_move == true
+    if @grid[target_row][target_col].possible_move
 
       if @grid[target_row][target_col].instance_of?(Piece)
         # swap positions
@@ -137,7 +138,6 @@ class Board
 
     # update location
     @grid[target_row][target_col].location = [target_row, target_col]
-
     @grid[target_row][target_col].first_move = true
 
     # promote to queen
@@ -156,15 +156,18 @@ class Board
         @grid[behind][target_col] = Piece.new([behind, target_col])
       end
     end
-    # castling
 
+    clear_board
+    @turn += 1
+  end
+
+  def clear_board
     8.times do |i|
       8.times do |j|
         @grid[i][j].possible_move = false
-        @grid[i][j].castling = false if @grid[i][j].instance_of?(King)
+        @grid[i][j].castling = false
       end
     end
-    @turn += 1
   end
 
   def castling_swap(initial_row, initial_col)

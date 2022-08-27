@@ -4,8 +4,8 @@ require_relative 'symbols'
 # Base class for all pieces. Also acts as a placeholder for the empty positions in the board for convenience
 class Piece
   include Symbols
-  attr_accessor :possible_move, :location, :first_move
-  attr_reader :color, :en_passant, :castling
+  attr_accessor :possible_move, :location, :first_move, :castling, :checkmate_move
+  attr_reader :color, :en_passant
 
   def initialize(location, color = nil)
     @location = location
