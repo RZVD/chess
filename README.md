@@ -4,7 +4,7 @@ This is a CLI-based implementation of a 2 player chess game written in ruby.
 
 # Installation
 
-Clone this repo and run `ruby lib/main.rb` to start the game or  
+Clone this repo and run `$ ruby lib/main.rb` to start the game or  
 [Run on replit](https://placeholderlink.com)
 
 # Playing 

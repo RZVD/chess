@@ -2,13 +2,7 @@ require_relative 'game'
 
 # game menu goes here
 
-game = Game.new
-
-puts 'Play new Human vs Human game (1) or Load Previous game (2)'
-option = gets.chomp.to_i
-
-if option == 1
-
+def play(game)
   until game.over
     game.board.draw
     first_move = game.chess_notation_to_coordinates
@@ -19,6 +13,15 @@ if option == 1
     game.board.draw
     game.over = game.board.check_mate?
   end
+end
+
+puts 'Play new Human vs Human game (1) or Load Previous game (2)'
+option = gets.chomp.to_i
+
+if option == 1
+  play(Game.new)
+else
+  play(Game.load_game)
 end
 
 puts 'Check Mate!'
