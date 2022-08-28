@@ -1,11 +1,12 @@
 require_relative 'lib/game'
 
-# game menu goes here
-
 def user_input(game, num)
   if num == 1
     move = game.chess_notation_to_coordinates
-    move = game.chess_notation_to_coordinates until game.board.piece_at(move).color == game.board.current_turn.downcase
+    until game.board.piece_at(move).color == game.board.current_turn.downcase
+      game.board.draw
+      move = game.chess_notation_to_coordinates
+    end
     move
   else
     move = game.chess_notation_to_coordinates

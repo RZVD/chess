@@ -12,6 +12,8 @@ Clone this repo and run `$ ruby lib/main.rb` to start the game or
 Input the moves in [Chess Algebraic notation](https://en.wikipedia.org/wiki/Algebraic_notation_(chess))
 starting with the initial position and the target position of the moved piece.
 
-[//]: # (# Saving)
+# Saving
 
-[//]: # (A game can be saved and resumed at a later date. Follow the instructions given by the menu )
+Save the game by typing ```S``` instead of a move command
+
+# A game can be saved and resumed at a later date. Follow the instructions given by the in game menu

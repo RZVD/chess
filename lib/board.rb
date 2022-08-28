@@ -105,8 +105,11 @@ class Board
 
       @grid[row_pos][col_pos].possible_move = true if same_color
 
-      @grid[row_pos][col_pos].castling = true if !same_color && !@grid[row][col].first_move &&
-                                                 !@grid[row_pos][col_pos].first_move && @grid[row_pos][col_pos].instance_of?(King) && @grid[row][col].instance_of?(Rook)
+      @grid[row_pos][col_pos].castling = true if !same_color &&
+                                                 !@grid[row][col].first_move &&
+                                                 @grid[row_pos][col_pos].first_move &&
+                                                 @grid[row_pos][col_pos].instance_of?(King) &&
+                                                 @grid[row][col].instance_of?(Rook)
     end
   end
 
