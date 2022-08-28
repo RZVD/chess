@@ -30,7 +30,7 @@ def play(game)
   end
 end
 
-puts 'Play new Human vs Human game (1) or Load Previous game (2)'
+puts "Play new Human vs Human game (1) or Load Previous game (2)\n Enter 'S' at any time to save the current game"
 option = gets.chomp.to_i
 
 if option == 1
