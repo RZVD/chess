@@ -8,11 +8,15 @@ require_relative 'pieces/queen'
 require_relative 'pieces/king'
 require_relative 'pieces/symbols'
 class Board
+  attr_reader :mate
+
   include Symbols
   def initialize
     @grid = Array.new(8) { Array.new(8) }
     @clear = OS.linux? ? 'clear' : 'cls'
     @turn = 0
+
+    @mate = false
 
     # pawns and empty squares
     8.times do |i|
@@ -82,7 +86,8 @@ class Board
       end
       puts
     end
-    puts '  a  b  c  d  e  f  g  h' # {current_turn}'s turn"
+    puts '  a  b  c  d  e  f  g  h  '
+    puts "#{current_turn}'s turn" unless check_mate?
   end
 
   def query_moves(location)
@@ -194,16 +199,12 @@ class Board
     end
   end
 
-  def current_turn(turn = @turn)
-    if turn.even?
+  def current_turn
+    if @turn.even?
       'White'
     else
       'Black'
     end
-  end
-
-  def piece_at(i, j)
-    @grid[i][j]
   end
 
   def check?
@@ -243,6 +244,7 @@ class Board
         @grid[i][j].possible_moves(@grid).each { |move| saving_moves << move } if piece.color == current_turn.downcase
       end
     end
-    overlap.reject { |move| saving_moves.any?(move) } == []
+    @mate = overlap.reject { |move| saving_moves.any?(move) } == []
+    @mate
   end
 end

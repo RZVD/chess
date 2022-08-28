@@ -11,7 +11,7 @@ def play(game)
     next_move = game.chess_notation_to_coordinates
     game.board.move(first_move, next_move)
     game.board.draw
-    game.over = game.board.check_mate?
+    game.over = game.board.mate
   end
 end
 
@@ -21,7 +21,7 @@ option = gets.chomp.to_i
 if option == 1
   play(Game.new)
 else
-  play(Game.load_game)
+  play(Game.new.load_game)
 end
 
 puts 'Check Mate!'
