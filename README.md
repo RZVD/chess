@@ -16,4 +16,5 @@ starting with the initial position and the target position of the moved piece.
 
 Save the game by typing ```S``` instead of a move command
 
-# A game can be saved and resumed at a later date. Follow the instructions given by the in game menu
+# Loading previous games
+A game can be saved and resumed at a later date. Follow the instructions given by the in game menu
