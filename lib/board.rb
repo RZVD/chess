@@ -110,6 +110,13 @@ class Board
     end
   end
 
+  def piece_at(location)
+    row = location[0]
+    col = location[1]
+
+    @grid[row][col]
+  end
+
   def move(initial_location, target_location)
     initial_row = initial_location[0]
     initial_col = initial_location[1]
