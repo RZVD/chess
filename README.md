@@ -9,6 +9,10 @@ Clone this repo and run `$ ruby lib/main.rb` to start the game or
 
 # Playing 
 
+
+
+
+
 Input the moves in [Chess Algebraic notation](https://en.wikipedia.org/wiki/Algebraic_notation_(chess))
 starting with the initial position and the target position of the moved piece.
 

@@ -7,15 +7,16 @@ require_relative 'pieces/knight'
 require_relative 'pieces/queen'
 require_relative 'pieces/king'
 require_relative 'pieces/symbols'
+
 class Board
   attr_reader :mate
 
   include Symbols
+
   def initialize
     @grid = Array.new(8) { Array.new(8) }
     @clear = OS.linux? ? 'clear' : 'cls'
     @turn = 0
-
     @mate = false
 
     # pawns and empty squares
@@ -90,7 +91,9 @@ class Board
     puts "#{current_turn}'s turn" unless check_mate?
   end
 
+  
   def query_moves(location)
+  say_hi(mooe)
     row = location[0]
     col = location[1]
 

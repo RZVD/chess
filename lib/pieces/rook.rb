@@ -13,6 +13,12 @@ class Rook < Piece
               end
   end
 
+  
+
+
+
+
+
   def possible_moves(grid)
     row = @location[0]
     col = @location[1]
@@ -42,8 +48,4 @@ class Rook < Piece
   def can_promote?
     super
   end
-
-  # def empty_or_king(item)
-  #   item.instance_of?(Piece) ||
-  # end
 end

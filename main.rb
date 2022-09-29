@@ -7,14 +7,12 @@ def user_input(game, num)
       game.board.draw
       move = game.chess_notation_to_coordinates
     end
-    move
   else
     move = game.chess_notation_to_coordinates
     move = game.chess_notation_to_coordinates until game.board.piece_at(move).possible_move || game.board.piece_at(move).castling
-    move
   end
+  move
 end
-
 def play(game)
   until game.over
 
